@@ -1,0 +1,208 @@
+maven目录结构
+src
+	main	
+		-java
+			-package
+
+	-test
+		-java
+			-package
+	resources
+pom.xml
+
+
+1.下载maven插件 apache-maven-3.5.0-bin.zip
+2.配置maven环境 计算机---》属性-----》高级系统设置----》高级---》环境变量------》系统变量
+（1）新建
+	变量名：M2_HOME
+	变量值：D:\apache-maven-3.5.0
+（2）path 编辑
+	在path变量值后添加：;%M2_HOME%/bin
+（3）测试：在dos中输入mvn -v
+
+http://maven.apache.org/download.cgi
+3.手动搭建mvn项目 按照上面的结构搭建
+4.构建maven
+（1）找到src所在的目录 mvn compile    编译项目
+（2）mvn test	 编译测试文件
+（3）mvn package    打成jar包
+
+
+
+maven常用命令
+
+mvn -v 查看maven 版本
+compile 编译
+test 测试
+package 打包
+
+
+clean 删除target
+install发布到本地仓库
+
+mvn archetype:generate
+构建maven项目
+一步到位：
+mvn archetype:generate -DgroupId=com.imooc.maven04 -DartifactId=maven04-demo -Dversion=1.0.0SNAPSHOT -Dpackage=com.imooc.maven04.demo
+
+groupId组织名，公司网站的反写+项目名
+artifactId项目名-模块名
+version版本号
+package代码所存在的包名
+
+坐标：
+构件：构件通过坐标作为唯一的标识
+仓库
+
+本地仓库和远程仓库
+pom-4.0.0.xml <repository>中的url是全球的仓库地址
+镜像仓库
+修改镜像仓库的位置
+settings.xml修改
+<mirror>
+      <id>maven.net.cn</id>
+      <mirrorOf>central</mirrorOf>
+      <name>central mirror in china</name>
+      <url>http://maven.net.cn/content/groups/public</url>
+</mirror>
+
+修改本地仓库位置
+默认在c盘：C:\Users\Administrator\.m2\repository
+不建议放在C盘中
+settting.xml
+修改路径：
+<localRepository>D:/Users/repo</localRepository>
+
+
+
+eclipse添加maven插件
+1.eclipse.ini 中添加 -vm c:\java\jdk1.7\bin\javaw.exe
+2.eclipse 中preferences--->maven---->installaions 添加插件apache-maven-3.5.0
+----->User Setttings   添加setttings.xml
+java--->installs jres  添加公共的jre  也就是jdk1.7下的jre
+
+
+new maven project
+
+user default workspace location
+
+选择maven-archetype-quickstart 1.1
+
+Group Id:
+Artifact Id;
+Package:
+
+运行
+右击---》run as ----》 maven build...
+Goals:输入compile命令 编译
+成功后 再输入package命令 打包
+
+完整的项目构建过程：
+清理、编译、测试、打包、集成测试、验证、部署
+
+maven 的声明周期：
+clean 清理项目  pre-clean,clean,post-clean
+default 构建项目 compile,test,package,install
+site 生成项目站点 pre-site,site,post-site,site-deploy
+
+
+将源码进行打包
+1.pom.xml
+<build>
+  	<plugins>
+  		<plugin>
+  			<!--将源码进行打包  -->
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-source-plugin</artifactId>
+  			<version>2.4</version>
+  			<executions>
+  				<execution>
+  					<phase>package</phase>
+  					<goals>
+  						<goal>jar-no-fork</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  	</plugins>
+  </build>
+2.run as-->maven build...  goals:clean package
+
+
+pom.xml常用元素
+
+modelVersion：指定pom的版本
+groupId：反写公司网址+项目名
+artifactId：
+version：版本号  snapshot快照、alpha内部测试、beta公测、release稳定、GA正式发布
+packaging：默认jar，还有war,zip,pom
+name：项目描述名
+url：项目地址
+description：项目描述
+developers：开发人员列表
+licenses:许可证
+
+dependencies：依赖列表
+<dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope> 
+      <optional></optional>依赖是否可选
+      <exclusions>
+	    <exclusion>
+	      排除依赖传递列表
+	     </exclusion>
+      </exclusions>
+    </dependency>
+</dependencies>
+
+dependencyManagement：依赖管理，不会被执行， 用来被继承的依赖
+
+build：
+parent：对pom的继承
+moules:指定多个模块
+
+
+依赖范围：scope
+compile
+provided:
+runtime:
+test:
+system:
+import:
+
+依赖的传递：
+ <modelVersion>4.0.0</modelVersion>
+    <groupId>com.imooc.maven02</groupId>
+    <artifactId>maven02-model02</artifactId>
+    <version>0.0.1SNAPSHOT</version>
+    
+    <dependencies>
+    	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.10</version>
+    	</dependency>
+    	<dependency>
+		传递依赖
+		<groupId>com.imooc.maven01</groupId>
+		<artifactId>maven01-model</artifactId>
+		<version>0.0.1SNAPSHOT</version>
+    	</dependency>
+</dependencies>
+
+
+依赖冲突：
+1.短路优先
+2.先申明先优先
+
+
+聚合和继承：
+
+聚合：
+
+
+继承：
+  

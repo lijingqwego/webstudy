@@ -1,0 +1,289 @@
+jsp由什么组成
+
+1.html代码，  标签 ，元素 
+
+2.java代码
+
+
+3.jsp标签，
+
+
+新建jsp ，创建java project ？ 
+
+需要创建 dynamic  web  project ，才可以创建jsp页面 
+
+jsp页面一般都放在 WebContent 目录下面 
+
+MEA-INF
+WEB-INF
+
+应用服务器 
+tomcat  jboss   weblogic 
+
+tomcat：轻量级的，能够部署web项目的框架 
+weblogic ：企业级的 ，部署一些大型的项目 。 
+
+
+tomcat如何判断是否正常 
+找到tomcat的安装目录，在bin目录下面有一个 strtup.bat 文件 ，双击： 表示启动tomcat服务 
+
+
+打开浏览器，在控制台输入 
+http://localhost:8080 /如果出现界面 ，
+localhost :本机
+127.0.0.1 
+查看本的实际ip地址 ： 
+
+
+8080:tomcat 的默认端口  可以修改的。 
+具体如何修改tomcat的端口 
+
+
+需要将eclipse 跟tomcat 进行绑定 。
+
+窗口 - 首选项   --  server  -- runtime  environment   指向tomcat的根目录 。
+
+window - perferences  --server 
+
+
+开发jsp项目 。
+
+jsp 新建在webContent文件夹下面 ，
+
+还可以写java代码 
+
+如果需要在jsp页面上写java代码，需要放在 
+<%   java代码 ， 分号结尾     %>
+
+<%= java 表达式，用来在页面上进行输出的 %>
+
+<%!  存放的是全局变量或者方法    %>
+
+运行 jsp   在jsp页面上 右键  选择 运行 (run as)
+
+
+jsp指令标签 
+<%@ 指令名称    属性 = 属性值  属性 = 属性值 %>
+
+page  : 
+iserrorpage  ：标识当前页面是否是错误页面 
+is  has 开头  统统 返回  boolean类型 。
+
+errorpage ： 当前页面发生错误跳转到哪个页面 。
+
+
+include指令标签 ：静态包含  ， 将多个jsp文件包含起来，最终生成一个java文件 。
+
+
+
+jsp：动作标签 
+
+jsp:forward  请求转发标签 ： 其实就是一次请求，
+页面上显示的地址是  转发前的地址 。
+
+
+jsp：include： 动态包含，包含的文件，最终生成多个java文件 。
+
+面向对象三大特征
+封装：就是把属性定义成私有的，然后对外提供访问属性的公共方法 。
+
+继承：extends 子类可以继承父类，可以使用父类中非私有的属性和方法 。
+
+子类也可以定义自己的属性和方法 
+
+子类也可以重写父类的方法 
+方法重写：在具有继承关系的类中，方法名相同，参数列表相同，返回类型也要相同。
+可以用@Override 来标识 。
+
+方法的重载：在同一个类中，方法名相同，参数列表不同，与返回类型无关。
+
+多态：
+满足的多态的三个条件 。
+1.需要有继承关系 
+2.需要有方法的重写
+3.父类的引用指向子类的对象 。
+
+
+
+List 和 Set 都继承了  Collection 接口 
+
+List:有序  可重复   
+
+inerface  List  
+ArrayList ：底层是基于数组实现的。  查询快
+LinkedList：底层是基于链表结构 ， 增，删，改 块
+Vector  ：重量级的，线程安全的。
+
+
+Set :无序  不可重复 。
+HashSet
+LinkedHahsSet
+TreeSet
+
+Map 存放的是键值对 。键 和 值 之间 是映射关系 
+
+便利map有两种方式，
+1.根据key来取value
+Map<String,Integer> map=new Map<String,Integer>();
+map.put("a",1);
+map.put("b",2);
+map.put("c",3);
+Iteractor<String> it=map.keySet();
+while(it.hasNext()){
+	String key=it.next();
+	Integer value=map.get(key);
+	System.out.println(key+" ---> " + value);
+}
+2.同时取出 key 和  value 
+Set<Entry<String,Integer>> entrySet = map.entrySet();
+for(Map.Entry<String,Integer> en:entrySet){
+String key = en.getKey();
+Integer value = en.getValue();
+System.out.println(key+" ----> " + value);
+}
+JSP九大内置对象 。
+
+
+request:请求对象 ，作用域  一次请求  
+
+request.getParameter("") 根据参数名来取参数值 
+
+所有的表单信息都需要被form包裹 
+
+因为form表单有一个action   表示的是提交地址 
+
+如果使用request.getParameter() 来获取表单里面的值，需要表单定义一个name属性 ，根据name属性来获取表单里面的值 。
+
+
+
+request 第二个作用 在作用域中管理属性
+作用域：一次请求 ，超出此次请求之后，属性就没效果了
+
+
+request.setAttribute(两个参数) 
+request.getAttribute() 
+
+
+response ：响应对象    作用域  一次响应
+
+主要用来做页面跳转的
+
+重定向
+response.sendRedirect("重定向的地址");
+
+跳转到另外一个页面 。并且页面上显示的地址 是跳转后的地址 。   两次请求，不能取到request作用域中的值 。
+
+
+
+
+
+javascript
+document.getElementById("") ;
+
+根据id来取这个对象  元素   标签
+
+
+
+session：会话对象 ，作用域  一次会话 
+
+//向会话中 添加属性  
+session.setAttribute("属性名","属性值") ;  
+session.getAttribute("属性名") ;
+session.removeAttribute() ;
+
+
+修改学生对象
+1.获取一个学生对象，展示在页面上来让用户进行修改
+ 
+
+
+你要修车 。
+
+
+如何获取表单提交的值 ？
+使用request.getParameter("")  
+
+表单需要设置 name'属性
+
+
+对学生信息 进行  增 ，删  ，改  查   3遍 
+
+
+
+
+
+out 输出对象 
+System.out.println(在控制台打印)  ;
+
+
+out.print() ;打印  一定要有参数 
+out.println() ; 打印   参数可以为空 
+
+out.flush() ;刷新  清空缓存 
+out.close() ; 关闭输出
+
+
+application ：应用程序 
+
+APP ：
+
+request ：作用域  一次请求  超出此次请求，就失效
+request.setAttribute() ;
+request.getAttribute();
+request.removeAttribute(); 
+
+session ：作用域 一次会话  ，超出此次会话，就失效
+session.setAttribute() ;
+session.getAttribute();
+session.removeAttribute(); 
+
+application：作用域：整个应用程序，直到应用服务器关闭位置
+application.setAttribute() ;
+application.getAttribute();
+application.removeAttribute(); 
+
+request.getParameter();
+1.可以获取 ？后面的参数值 
+2.可以获取表单里面的值，但是需要设置name属性
+
+application.getInitParameter();
+//获取初始化参数 的值 
+
+
+java web 项目  
+有时候需要配置一些初始化的参数 。
+
+就在web.xml文件中配置
+
+
+
+init ：初始化的
+
+page 
+config
+pageContext
+exception 
+
+
+
+'
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+

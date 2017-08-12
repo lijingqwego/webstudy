@@ -1,0 +1,66 @@
+mybatis配置
+1.SqlMapConfig.xml 配置文件 。文件名可以修改
+它是mybatis的总配置文件 ，
+
+1.连接池 
+2.在SqlMapConfig.xml文件需要包含 mapper.xml子配置文件 。
+
+POJO：自定义封装的实体类
+
+1.
+封装实体类，表名需要和类名保持一致
+列名需要和属性名保持一致 。
+
+2.mybatis需要一个主配置文件 SqlMapConfig.xml
+配置文件
+
+3.创建db.properties属性文件，定义数据库连接的各个属性
+
+4.在sqlMapConfig.xml文件，需要引入属性文件，使用properties标签
+
+5.创建userinfo.xml子配置文件 ，需要在SqlMapConfig.xml总配置文件中来加载
+
+6.编写子配置文件userinfo.xml
+子配置文件需要指定命名空间 ，
+命名空间相当于包名 ，包相当于文件夹 。
+
+7.编写DAO接口 ，编写接口的实现类 。
+
+8.构建SqlSessionFactory 会话工厂
+
+
+当查询结果为多条数据时候，需要将多条数据保存在一个集合里面 ，那么在mybatis中resultType指定的类型就是集合中的每一条的数据类型 。
+创建表
+create table USERINFO
+(
+  id       NUMBER(18) not null,
+  username VARCHAR2(32),
+  birthday VARCHAR2(12),
+  sex      CHAR(1),
+  address  VARCHAR2(256)
+)
+;
+comment on column USERINFO.id 
+
+  is '用户id';
+comment on column USERINFO.username
+  is '用户姓名';
+comment on column USERINFO.birthday
+  is '生日';
+comment on column USERINFO.sex
+  is '性别';
+comment on column USERINFO.address
+  is '地址';
+alter table USERINFO
+  add constraint ID_KEY primary key (ID);
+  
+添加数据 
+
+
+insert  into userinfo(id,username,birthday,sex,address) values (20160818000001,'王五',to_char(sysdate,'yyyy-MM-dd'),'2',NULL);
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000002,'张三',to_char(sysdate,'yyyy-MM-dd'),'1','北京市');
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000003,'张小明',to_char(sysdate,'yyyy-MM-dd'),'1','河南郑州');
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000004,'陈小明',to_char(sysdate,'yyyy-MM-dd'),'1','河南郑州');
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000005,'张三丰',to_char(sysdate,'yyyy-MM-dd'),'1','河南郑州');
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000006,'陈小明',to_char(sysdate,'yyyy-MM-dd'),'1','河南郑州');
+insert  into userinfo(id,username,birthday,sex,address) values(20160818000007,'王五',to_char(sysdate,'yyyy-MM-dd'),'2',NULL);

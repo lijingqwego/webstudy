@@ -1,0 +1,264 @@
+json 格式的数据传递 
+
+创建对象  json 格式的数据 
+var person =  {username : "tom" ,age : 18 };
+
+
+person.username ; 
+
+person["username"] 
+
+var person = new Object() ;
+person.username =  '';
+person.age = '';
+
+登录  ，增，删，改，查 
+
+
+用户名和密码输入正确的时候，跳转到显示页面。
+用户名和密码错误的时候呢 ，直接跳转到登录界面 。
+
+
+
+
+用户登录了才能够看到后面的页面
+
+
+
+过滤器来实现的。
+Filter 
+init ： 初始化 
+destory ： 销毁 。
+doFilter 方法 ：
+
+判断session中是否有值 。
+
+当用户登录成功之后，才将用户的信息保存在session中 。
+
+urlPatterns = “/*”所有的请求都需要经过过滤器 
+reg.jsp  login.jsp regServlet  loginServlet 
+
+
+//定义一个方法，判断哪些url 不需要经过过滤器的
+
+//获取url 
+	String path = request.getRequestURI()
+	request.getRequestURL()
+
+if(isFilter(path)){
+	//表示是指定路径中的某一个 ，不需要判断session中是否有值 。请求直接向后流转 
+	
+}else{
+	//不是指定的页面，需要判断session中是否有值
+	if(session中有值){
+	已经登录 ，请求向下流转 
+	chain.doFilter() ;
+}else{
+	//跳转到登录界面 
+
+}
+}
+
+
+
+
+
+
+public boolean isFilter(String path){
+	boolean flag = false; 
+	//首先需要定义好，哪些页面不需要经过过滤器 
+	String[] str = {reg.jsp,login.jsp,loginSerlet,regServlet,.css}
+	for(int i = 0 ; i < str.length ; i++)
+ 	if(path.contains(str[i])){
+		flag = true ; 
+		break; 
+	}
+	return flag; 
+}
+
+
+
+jquery ：流行的javascript库 ，里面封装了很多预先定义好的函数  
+jquery程序的入口  相当于  window.onload 页面加载事件 
+
+
+$(function(){
+	alert('eeee') ;
+});
+
+$(document).ready(function(){
+	
+});
+
+//使用jquery之前，需要引入javascript库
+<script src="" ></script>
+<link href  rel  type >
+
+
+
+
+javabean java 类 
+1.可视化javabean 
+2.非可视化的javabean 
+
+mvc 
+m：model 模型层  javabean来充当 。
+
+封装实体类的javabean 
+数据库操作的javabean
+封装业务逻辑实体的javabean
+
+v：视图  jsp
+c：控制层 controller servlet 
+
+
+1.编写DBHelper 数据库操作的公共类 
+
+DBHelper
+1.getConnection() 
+	1.Class.forName("oracle.jdbc.driver.OracleDriver")
+	2.DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","","")
+
+2.编写查询公共方法
+executeQuery(String sql,Object...obj){
+	conn = getConnection(); 
+	PreparedStatement pre = conn.pre(sql) ;
+	//设置参数 
+	for(int i = 0  ; i < obj.length ; i++){
+		pre.setString(i+1,obj[i].toString()); 
+	}
+	ResultSet rs = pre.executeQuery();
+	return rs ; 
+}
+
+
+
+3.增，删，改的公共方法 
+
+executeUpdate(String sql,Object...obj){
+	conn = getConnection(); 
+	PreparedStatement pre = conn.pre(sql) ;
+	//设置参数 
+	for(int i = 0  ; i < obj.length ; i++){
+		pre.setString(i+1,obj[i].toString()); 
+	}
+	//返回受影响的行数 
+	int count = pre.executeUpdate() ;
+	pre.close();
+	conn.close() ;
+}
+
+
+1.dao 数据持久层，对数据库进行操作 
+impl
+
+2.service 业务逻辑处理层 ，因为我们现在没有具体的业务逻辑，所以我们看到的最多的是在service层直接调用dao层中的方法 。
+
+3.控制器 servlet  接受用户输入的值，还能进行页面的之间的跳转 。
+
+jsp：做显示作用 。
+
+
+
+
+
+
+接口interface 
+
+1.不能被实例化 
+2.接口中只能有常量，抽象方法 
+
+常量 ：命名规则，
+final 修饰变量，常量，常量的不能改变 
+final 类 ： 这个类不能被继承 
+final 方法，方法不能重写 。
+
+fianlly ：try  catch finally  
+放在finally里面的代码，一定会执行，哪怕你在try中使用了return 
+
+finalize ：当对象调用finalize方法之后，会释放空间，
+但是是相对的。  因为jvm会自动检测在后面的代码中是否使用了这个对象，如果使用了，不会销毁， 
+
+
+继承使用 extends 
+子类继承了父类，就可以使用父类中非私有的二属性和方法
+子类也可以定义自己的属性和方法 。
+
+子类也可以重写父类的属性和方法 
+@Override 
+方法重写： 在具有继承关系的类中，方法名相同，参数相同，返回类型呢也要相同。
+
+
+方法重载 ： 在同一个类中，方法名相同，参数列表不同，返回类型无关。
+
+
+
+封装，继承，多态 
+
+设置成私有的，然后定义公共的访问方法 。
+
+
+多态
+三个条件 
+1.第一要有继承关系 
+2.要有方法的重写 
+3.父类的引用指向子类的对象 。
+
+父类的引用指向子类的对象 ，只能调用父类中存在的方法，不能调用子类特有的方法 。
+
+父类作为方法的参数 。
+这个父类的所有的子类都可以传递进来 
+
+父类作为方法的返回值 。
+所有的子类都可以 当做返回返回对象 。
+
+1.基本数据类型
+
+2.引用数据类型
+
+按值传递，按引用传递 。
+
+public static void main(String[] args){
+	Student stu = new Student();
+	test(stu) ;
+	System.out.println(stu.getName()) ;
+}
+
+public static void test(Student stu ){
+	stu.setName("小明") ;
+}
+
+
+
+
+1.登录，非空校验，
+
+
+用户名和密码是否正确的校验
+2.过滤器，字符编码过滤器，post和get   用户是否登录的过滤器
+3.增，删，改，查 。
+
+今天下午，还有明天一天时间，写完 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

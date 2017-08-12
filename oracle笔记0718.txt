@@ -1,0 +1,225 @@
+
+
+外连接  以一张表为基表，基表的数据会全部显示 ，
+同时显示与另一张表匹配的内容 。
+
+几列 ？  
+select dept.*,emp.id,emp.name from dept ，emp； 
+
+内连接，查询两表中都存在的数据 ，
+外连接，
+
+
+
+语法 ：
+
+创建表 
+
+create table 表名
+(
+	列名  数据类型
+	.....
+) ;
+添加
+insert into 表名 (列名) values (值) ;
+列名 和 值需要一一对应  
+
+表名 后面的列 名 是否可以省略呢 ？
+
+可以的，但是当向表中所有的列都插入值的时候，才可以省略
+
+
+删除
+
+delete from 表名 where 条件   ； 
+commit ；
+
+----
+
+truncate table  表名  ； 
+
+修改
+
+update 表名 set 列名 = 值  where 条件 ； 
+查询
+
+select 列名 from 表名  ； 
+
+* ：可以查询所有的列。
+
+删除重复数据
+
+1.创建临时表保存不重复的数据
+create table temp_s
+as
+select distinct * from 表名  order by  id  ; 
+2.删除原表中的所有数据
+delete from s ;
+
+commit ; 
+
+
+3.将临时表的数据插入到原表中去
+
+insert into s select * from temp_s ; 
+4.删除临时表
+
+drop table temp_s ; 
+
+
+--首先需要按照重复的列来进行分组 
+
+delete from s7 where sid not in  
+(select max(rowid) from s7 group by sid ); 
+
+子查询：其实就是嵌套查询，
+为什么要使用子查询呢 ？ 
+因为在很多情况下，where后面条件的值不是一个具体的值或者表达式，而是另外一个查询的查询结果 。
+
+
+
+
+数据分页。 rownum ; 
+
+
+select rownum , s.* from s where rownum  > 5 and rownum <= 10;
+ 
+如果要使用rownum 需要从1 开始。
+select * from 
+(select rownum rn, s.* from s ) t 
+where rn > 0 and rn <= 5; 
+ 
+
+
+数据库对象 
+
+数据是由若干表组成的。 表 就是数据库对象的一种 。
+
+序列(Sequence) :可以实现一串连续，自动增长的数字 。
+
+创建序列的语法：
+
+create sequence 序列名  ; 
+
+序列只有两种用法
+1.  序列名.nextval 查看序列的下一个值。
+2.  序列名.currval 查看序列的当前值 。
+
+
+序列刚刚创建完毕之后，不能查看序列的当前值，只能查看下一个值。
+
+完整语法：
+create sequence seq 
+maxvalue  50000000
+minvalue  10000
+startwith 8000
+increment by 1
+cycle ;
+
+起始值不能小于最小值 。
+
+序列：主要用来实现主键自动且唯一的增长 。
+
+
+
+索引(index) ：索引相当于目录，
+作用：能够快速定位到要查找数据所在的数据块，从而减少查询时间，提高查询效率。
+
+语法：
+create index 索引名  on 表名(列名) ;
+
+删除
+drop index 索引名  ;
+
+缺点：
+1.会占用物理空间，并且随着数量的增大，占用的空间会越来越多
+2.创建和维护索引需要耗费时间，
+3.但是会显著的提升增，删，改的时间 。
+
+哪些列上适合创建索引 ？
+1.经常用来查询的列。
+2.经常用来排序的列。
+3.经常用来分组的列。
+4.经常用来充当where条件的列。
+
+sql优化。
+有一条sql，执行起来非常慢 ，让你优化一下 。
+
+
+
+
+3.同义词synonym ：别名 。意义相近的词 。
+在oracle中，同义词分为 两种。
+1.公共同义词
+语法
+create public synonym 同义词名 for 数据库对象名 ; 
+
+在oracle中，区分用户，不同用户可以互相访问对象用户下的表吗 ？
+可以，但是需要授权。
+
+创建公共同义词的目的，就是为了让其他用户能够操作这个表 。
+
+在实际工作中，创建表之后，需要创建一个和表同名的公共同义词。
+
+删除公共同义词
+drop public synonym 同义词名  ; 
+
+2.私有同义词
+语法:
+create synonym  同义词名 for  对象名  ;
+
+私有同义词名不能和数据库对象名相同  ;
+
+--删除私有同义词
+drop synonym 同义词名 ; 
+
+
+4.视图(view)  :视图其实就是虚表 。因为它不占用物理空间，但是也只是相对的概念，因为定义视图的sql还占据了一点点空间，可以忽略，视图每次在执行的时候，相当于重新执行了一次select语句。
+
+
+dual：oracle中自带的一张虚表，oracle保证这个表只有一条记录
+主要用来查看当前用户，调用函数，查看系统时间。
+
+
+语法：
+create [or replace] view 视图名
+as
+select 查询语句 
+[with read only]
+[with check option] ;
+
+好处：
+1.更改原表的数据，会自动的更新到视图中。
+2.简化复杂的sql语句 。
+3.保障数据的安全性 。
+4.执行某些必须使用视图的查询 。
+
+or repalce  创建或者替换 。
+with read only ：只读 ，不能修改 。
+with check option ：如果要修改视图，但是修改之后的数据需要满足sql语句的where条件。
+
+5.order by 
+排序 
+asc   升序 
+desc  降序 
+
+多列排序的排序规则：
+如果按照多列进行排序，首先按照第一列来进行排序，如果第一列相同，在按照第二列进行排序
+
+空值默认是最大值 。
+对空值 进行排序   如果空值 放在 最后面  nulls last
+空值 放  最前面   nulls first 
+
+空值放中间。
+借用 decode函数 。
+
+查询空值 使用 is null 
+
+6.group by 分组，
+当查询中出现了group by 分组的时候，select 显示的列，要么聚合函数列，要么是group by 分组列 。
+
+group by 按照两列来进行分组 。
+
+group by 后面跟上两个列名 。
+
+子查询

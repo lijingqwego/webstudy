@@ -1,0 +1,365 @@
+oracle数据库复习
+
+管理员身份来登录
+conn as sysdba 
+
+登录完成之后，创建用户 
+
+create user 用户名  identified by  密码  ；
+
+给用户授权
+grant 具体的权限名  to 用户名 ; 
+
+具体的权限名
+connect  连接数据库的权限
+resouce ：访问数据库资源的权限
+dba ：数据库管理员的权限 
+
+
+数据库是由若干个表组成的
+表是由行和列组成的。
+
+创建表的语法 
+create table 表名
+(
+	列名  数据类型 , 
+	.......
+)  ;
+
+
+数据类型  需要用系统给定的数据类型 。
+char(n) ：定长字符串   n表示长度  长度单位 
+字节为单位    1个汉字  2个字节    n最大值 2000 
+char(20)  
+
+varchar2(n)  :  最大值不一样 4000 
+变长字符串 ：
+
+int ：整数类型  
+
+number(m,n) 
+m：总长度   
+n：小数点后面的位数 
+number(m)  :整数位 
+
+
+date ：日期类型    日月年  
+
+long ：2Gb
+blob ：4GB
+
+var 
+
+
+
+create or replace trigger 
+
+添加
+insert into 表名(列名) values (值)  ;
+
+列名和值  需要  一一对应 
+
+
+查询
+select * from 表名 ; 
+
+修改
+
+update 表名 set 列名 = 值 where 条件; 
+
+删除
+delete from 表名 where ...  ;
+
+
+第二章 
+
+sql命令的分类 
+1.DDL :数据定义语言  以 create alter  drop 开头的数据定义语言 
+
+//创建表  create
+
+//修改表
+--添加列
+alter table 表名 add 列名  数据类型 ; 
+
+--删除列
+alter table 表名  drop  column 列名 ; 
+
+--drop
+删除表 
+
+
+2.DML:数据操作语言  
+insert 
+delete
+update
+
+3.DQL：数据查询语
+select
+
+4.DCL：数据控制语言 
+
+grant    ：授权 
+revoke   ：取消权限
+revoke 权限名  from  用户 
+
+5.事务性控制命令
+commit  rollback; 
+
+sql语言的特点 ?
+
+关键字不区分大小写，表名和列名不区分大小写，但是where后面条件的值需要区分大小写； 
+
+
+distinct ：过滤重复数据 。
+
+distinct * 表示 所有的列都重复，才进行过滤 
+
+//如何删除重复数据 ？   
+有两条数据一模一样 ，如何删除其中的一条数据 。
+
+1.创建临时表，用来保存不重复的数据
+create table temp_t
+as
+select distinct * from t ;
+
+
+2.把原表中的数据删除掉  
+
+delete from t ; 
+commit;  
+--快速删除表中数据的方法 。
+trucate table t ; 
+--使用truncate 删除数据，不能回滚 。
+
+3.将临时表的数据插入到原表中 
+insert into  t  select * from temp_t 
+
+commit ; 
+
+4.删除临时表 
+drop table temp_t ; 
+
+
+as关键字   起 别名  
+
+数据采集 。  从数据库查询出来用户想要的数据 
+
+
+
+||  连接多个字符串 
+
+
+oracle里面的单行函数 
+concat（a，b）  连接两个字符串 
+trim()  去掉字符串左右两边的空格 。
+floor() 向下取整  
+ceil()
+abs（）  取绝对值 
+add_months()  
+last_day () 取最后一天 
+
+to_date  :将字符串转换为日期 
+to_date('2017-1-1','yyyy-MM-dd')
+to_char  :将日期转换成字符串 
+dd-MM-yy  
+
+查看当前时间
+select sysdate from dual ; 
+
+dual :是表  ，虚表  ，因为oracle保证这个表中永远只有一条记录，
+用来做计算，用来调用函数，用来查看当前用户 
+
+select user from dual; 
+
+--聚合函数
+count() :统计有效数据的数量
+max :求最大值 
+min :求最小值
+avg :求平均值
+sum ： 求和 
+
+
+where 后面不能跟聚合 函数 
+如果需要聚合函数当做条件 ，需要使用having 
+
+select * from student 
+where  age < avg(age) ;
+
+
+group  by分组 
+当select 中出现group by 分组的时候，select 显示的列只能是聚合函数列，或者是 group by 分组列 
+
+
+order by 排序  
+asc  升序
+desc 降序 
+
+可以按照两列来进行排序 
+规则：首先按照第一列来进行排序，如果第一列的值相同，在按照第二列来进行排序 
+
+order by  列名1  ， 列名2 ； 
+
+
+多表连接查询 
+
+1.内连接
+其实就是查询两张表中同时存在的数据 。
+
+select * from emp ,dept where emp.deptno = dept.depno ;
+
+两张表需要有相同意义字段，才能够连接 。
+
+2.外连接
+1.左外 ：都需要以一张表为基表，基表的数据会全部显示，如果没有相匹配的数据，用空格填充 
+
+就是以左边的表为基表 
+select * from dept left join emp on dept.deptno = emp.deptno ;
+
+显示dept表中的全部数据，并且显示和emp表中相匹配的数据，没有匹配的数据用空格填充 。
+
+select * from dept ,emp where dept.deptno = emp.deptno(+) ; 
+
+(+) 在哪个表后面表示哪个表是匹配的表 。
+
+2.右外
+3.全外 ：显示的数据是  两表匹配的数据和两表不匹配的数据 。
+
+
+表约束   创建表的时候添加的约束 。
+1.default 默认约束 
+2.not null  非空
+3.unique  唯一约束 ：不能重复   可以为null
+4.primary key  主键约束 ：不能重复  不能为空
+5.check   检查约束   check (age between 18 and 30)
+6.foreign key    两个表上 
+外键需要关联主表的主键  
+外键约束的作用 ：当某一列上设置了外键之后，相当于限制了这一列的取值范围 ，只能从主表的主键列中来取值 
+
+
+通过代码来添加约束 
+--添加主键约束   emp  id 
+alter table emp  add  constraint pk_id primary key (id) ;
+
+--添加一个外键 
+alter table emp  add constraint fk_id foreign key (id) 
+references dept(id)
+
+--非空   和  默认 都是这种语法 
+
+alter table emp modify (列名 not null) ;
+
+
+rownum  rowid  两个伪列 
+
+rownum主要用来分页 
+rownum 需要从1 开始 
+
+select * from 
+(select rownum rn e.* from emp e) t 
+where t.rn > pageSize(n-1)  and t.rn <= pageSize * n; 
+
+rowid 物理上的，不会重复的 
+用来删除重复数据
+
+delete from emp where rowid not in 
+max(rowid) from emp group by sno )
+
+
+第三章
+序列 sequence 保证主键自动连续且唯一的增长 。
+
+语法
+
+create sequence seq 
+maxvalue 
+minvalue 
+start with
+increment by 
+cycle  ;
+
+调用
+select seq.nextval from dual; 
+select seq.currval from dual; 
+
+
+索引 index 
+作用：可以在查询的时候，快速定位要访问数据所在的数据块，从而减少查询时间，提高查询效率 。
+
+语法：
+create index 索引名 on  表名 (列名) ;
+
+缺点：
+1.会占用你的物理空间 。
+2.创建索引和维护索引都需要耗费一定的时间 。
+3.增加  增  删  改的时间  。。
+
+哪些列上适合创建索引
+1.在经常需要查询的列上添加索引
+2.在经常需要充当where条件的列上添加索引
+3.在经常需要排序的列上添加索引
+4.在经常需要做连接的列上添加索引 。
+
+
+
+同义词  synonym 
+
+1.公共同义词
+
+create public synonym 同义词名  for 数据库对象名 ； 
+
+
+可以被其他用户访问 
+
+作用 ？ 
+
+创建表的用户和需要使用表的用户不是同一个 ，所以通常情况下我们在创建表的同时，给创建一个和表同名的公共同义词 。
+
+目的就是为了方便其他用户来进行访问 。
+
+
+2.私有同义词
+create synonym 同义词名  for 数据库对象名 ； 
+
+
+
+视图 ：虚表 。
+语法
+create or replace view 视图名
+as
+select 语句 ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

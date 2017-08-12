@@ -1,0 +1,362 @@
+
+
+
+
+主要讲三个内容
+1.ssm框架复习
+2.spring-tiles框架
+3.将数据库中的表，生成具体的类和实体 。逆向工程
+4.考试管理系统，权限模块。。
+
+
+
+
+SSM ，运转流程。
+
+Spring Spring MVC  Mybatis 
+
+1.Mybatis :持久层的框架。
+DAO：专门用来和数据库进行交互。
+
+mybatis 相比  JDBC 操作，有哪些优势 。
+1.自动映射，查询出来的列，直接映射上类的属性中。
+2.sql语句编写灵活。
+
+insert into 表名
+<trim prefix suffix suffixoverride
+
+
+id ,name age 
+
+String sql = insert into 表名 (
+if (id != null )
+	sql += "id ,";
+if(name != null)
+	sql += "name ,"
+
+if(age != null)
+	sql +="age," 
+
+insert into 表名(id , name , age,
+
+sql.subString(sql,0,sql.length-2) 
+insert into 表名(id , name , age
+
+sql += ")" 
+
+mybatis使用步骤
+1.dao  ，写接口的实现类 。
+
+创建SqlSessionFactory
+
+String resource ="SqlMapConfig.xml";
+
+InputStream inputSteam = Resources.get(resource)
+
+SqlSessionFactory sf = new SqlSessionFactoryBuilder().build(inputStream) ;
+
+
+2.得到sqlSession 
+
+SqlSession sqlSession = sf.openSession();
+
+--查询单个信息 
+sqlSession.selectOne("命名空间.id","参数");
+sqlSession.selectList("命名空间.id","参数");
+
+sqlSession.insert ,delete ,update 
+
+//需要
+sqlSession.commit() ;
+
+sqlSesssion.close() ;
+
+
+存接口方式来进行开发。
+
+1、要求接口的名称和xml文件的名称需要保持一致
+2.xml文件中的命名空间
+<mapper namespace="接口的全路径"
+
+3.xml中的标签的 id 属性的值，需要和方法的名称保持一致 。
+
+测试
+1.拿到SqlSesssionFactory 
+2.拿到SqlSession 
+3.调用sqlSession.getMapper(需要实例化的类 )
+
+4.调用上面对象的方法 。
+
+
+
+spring ：IOC ，AOP 
+IOC：控制反转。
+
+模拟spring 的运行程序 
+1.创建接口 BeanFactory 
+
+public Object getBean(String key) ;
+
+
+2.创建一个类 ClasspathXmlApplicationContext 
+
+implements BeanFactory 接口
+
+//存放所有的类的对象 。
+private Map<String , Object> beans = new HashMap<String , Object>();
+
+
+
+/*
+	根据key 来取对应的Object 
+*/
+public Object getBean(String key) {
+	return beans.get(key) ;
+}
+
+写ClasspathXmlApplicationContext  构造方法 。
+
+1.加载beans.xml配置文件。
+2.解析xml配置文件 。SAXBuilder  sx
+3.获取根节点  Element el sx.getRootElement() ;
+4.拿到根节点下面的所有 bean 
+5.读取出  id 属性  和  class 属性 的值 。封装一个变量中
+id 其实就是 key 值   
+String clazz = el.getAttributeValue("class");
+
+实例化java 类 
+
+Object obj = Class.newInstance(clazz); 
+
+--放入到Map中
+beans.put(id,obj) ;
+
+--检查哪些类需要注入  找到哪些类下面有property属性的标签 。
+
+for（）{
+	读取 name  和  ref 属性的值 。
+	String name = “” ;
+	String ref =""; 
+	// 获取ref 代表的对象，这个代码怎么写 ？
+	Object dao层类的对象 = beans.get("dao") ;
+
+	在service中需要注入的是不是dao层类的对象 。
+
+	在set方法中进行注入 。获取set方法 。
+	拼接出方法名 。
+	String methodName = "set" + name.subString(0,1).upperCase() +
+	name.subString(1) ; 	
+
+
+	通过反射的形式来调用这个方法 。
+	
+	Method  m = 
+	m.invoke() ;
+	
+}
+
+
+BeanFactory factory  = new ClassPathXmlAp() ;
+
+
+IOC  
+DI
+
+<beans>
+	<bean id = dao class="dao">
+	<bean id=""  class="service">
+		--注入dao
+		<property name="dao" ref="dao">
+		name 其实就是在service中定义的dao层属性值
+	</bean>
+
+java bean | java类
+
+
+spring 主要作用就是用来整合 各个层 整合其他框架 
+
+spring + mybatis 的整合 。
+
+SSM 的框 
+
+Spring  MVC：表现层的框架 。
+
+1.前端控制器 DispathcerServlet
+在web.xml文件中配置。
+
+url-pattern *.action *.do  *.html 
+
+spring mvc 提交json数据 
+在jsp页面中写javascript 可以正常返回json数据 。
+
+javascript放在 .js 文件中 。
+
+实际测试的时候发现，url 不能和 DispatcherServlet 进行匹配 。
+
+
+加载spring mvc 的配置文件 
+<init-param >
+	<param-name
+	value 
+
+2.处理器映射器 HandlerMapping 
+a.BeanNameUrlHandlerMapping
+b.SimpleUrlHandlerMapping
+c.RequestMappingHandlerMapping
+
+3.处理器适配器 HandlerAdapter
+a.SimpleControlelrHandlerAdapter
+2.HttpServletHandlerAdapter
+c.RequestMappingHandlerAdapter
+
+
+4.视图解析器  ViewResolver 
+
+InternalResourceBiewResolver 
+viewClass 
+prefix
+sufffix 
+
+Spring-tiles 框架 。
+
+spring mvc 运转流程，形成文档的形式。
+
+Spring-tiles  页面布局框架。
+
+1.加jar包 。
+2.更新视图解析器 。使用tiles 的视图解析器 
+
+<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.tiles2.TilesView</value>
+		</property>
+	</bean>
+
+3.加载tiles 配置文件。
+	<!-- 加载tiles框架所需要使用的配置文件 -->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>classpath:web/views.xml</value>
+			</list>
+		</property>
+	</bean>
+
+
+4.定义view.xml 配置文件。
+
+5.在controller 返回就不是返回逻辑视图名了，而是返回tiles框架里面定义的名称 。
+
+
+
+
+逆向工程：就是将数据库中表自动生成对应的java 类 ，以及单表的增删改查的mapper
+
+userinfo  
+
+cn.com.demo.po
+UserInfo 类 
+
+private int id 
+privaet int age ; 
+
+
+cn.com.demo.mapper
+UserInfoMapper.java
+
+UserInfoMapper.xml 
+
+
+1.通过插件的形式 。
+2.xml配置文件的方式。 其实就是一段代码 。
+
+把需要逆向工程生成的表 放入到xml文件中，配置一个表名 。
+指定生成文件的位置。
+
+通过执行一段程序，就可以自动生成了。
+
+加载对应的的包 。
+
+po/model/entity 
+
+targetPackage:不能随意指定  com.test
+
+这个包的路径是以你实际使用的时候的包路径为准。
+
+
+cn.com.demo.po .
+
+
+
+
+
+
+
+项目-权限模块
+
+先从小来的做起，
+
+先从权限模块做起 
+
+用户表 
+
+用户可以有角色 
+一个用户可以有多个角色 。
+一个角色可以对应多个用户  。
+
+角色表
+老师
+学生
+校长
+
+
+一个角色可以有多个权限
+一个权限可以对应多个角色
+
+权限表
+老师-定制考试题目，批改考试题  对题目进行管理，对学生进行管理
+学生-只能做题  
+
+校长-对老师进行管理。对学生进行管理。
+
+
+
+资源表 ：
+其实就是 进入系统之后，左边看到的菜单。
+
+不同用户进来之后，看到的菜单是不一样的。
+
+校长 - 看到所有的菜单  学生管理，老师管理，试卷管理
+老师 - 学生管理，试卷管理
+学生 - 考试
+
+
+
+点击
+
+
+用spring-tiles框架，来实现这个功能
+查询所有用户
+查询所有角色
+用户关联角色的功能 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

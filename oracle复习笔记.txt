@@ -1,0 +1,303 @@
+首先判断下电脑上有没有安装oracle
+
+打开运行窗口  cmd窗口 ，输入sqlplus
+
+如果出现了“请输入用户名” 
+
+已经安装了oracle数据库 。。
+
+sqlplus：oracle自带的操作数据库的工具 。
+
+登录方式
+用户名/密码@数据库名  
+
+
+是创建数据库时候自己设定的。
+
+如果电脑上只有一个数据库，
+登录的时候
+用户名/密码 
+
+
+
+conn as sysdba
+
+connect :连接
+as  ：作为
+sysdba  ：数据库管理员
+
+使用管理员身份进来之后，需要创建自己的用户。
+
+语法
+create user 用户名  identified by 密码 ; 
+
+用户创建完成之后，没有任何权限。
+需要授权 
+
+grant connect ,resouce ,dba to 用户名 ; 
+
+PLsql叫做开发者工具 。
+
+oracle字符串类型 
+char(n)   字节，一个汉字，两个字节  2000
+varchar2(n)  4000  
+varchar(200)
+
+--数字
+int
+ 
+number(m,n)  
+m:总长度 
+n:小数点后面的位数 。
+
+number(5,2) :   999.99
+number(m)   :   总长度 ，整数位的长度 。
+
+date  ：oracle默认的日期格式  DD-MM-YY 日月年。
+
+
+long 2GB  ，一张表中最多只能有一列是long类型 。
+
+
+
+--增   删   改   查 
+insert into 表名(列名) values (值)  ;
+
+delete from 表名  where 条件 ; 
+
+update 表名  set  列名 = 值  where 条件  ;
+
+select * from 表名 ; 
+
+
+除了写java代码之外，还要sql脚本吧 
+
+创建表      初始化数据进去   
+触发器的脚本   等等 。。。。
+
+ 
+系统名_用什么用户执行_脚本类型_脚本的编号01_开发人员.sql ;
+
+SQL命令的分类
+1.DDL：数据定义语言
+以  create   alter   drop 开头的 就是 数据定义语言 。。
+
+--alter 修改的意思 
+
+--添加一列 
+alter table 表名  add 列名  数据类型  ;
+
+--删除一列
+alter table 表名  drop column 列名 ; 
+
+--drop
+删除表
+drop table 表名  ;
+
+2.DML：数据操作语言 
+insert     delete    update  开头的都是 dml操作语言
+
+3.DQL：数据查询语言
+select  
+
+4.DCL：数据控制语言
+grant  授权  
+revoke  取消权限
+
+revoke connect ,resource from  用户 ; 
+
+
+5.事务性控制命令 
+在mysql中  执行   增  ，删  改 之后，需要手动提交吗 ？
+
+在oracle执行完  insert  delete  update  之后，需要手动的commit  ，才表示 把数据真正保存到数据库中 。
+
+
+
+sql语言的特点 
+表名列名不区分大小写 ， 关键字不区分大小写 ，where 后面条件的值，需要区分小写 。
+
+distinct 关键字 。
+
+去除重复行  ，过滤  
+
+如何删除两条一模一样的数据 。。
+
+1.查询出不重复的数据，保存在临时表中 
+2.删除原表中的所有数据 
+3.将临时表中的数据  插入到原表中 
+4.删除临时表。
+
+--这个操作只针对于表里面的数据非常少的情况。。
+表 50W 条数据  100 条是重复。 
+
+
+如果表的数据非常多 ，这个时候使用rowid 
+
+rowid  伪列 。并不是 创建表的时候，添加的列。
+但是每个表都有rowid这个伪列 。
+
+
+rowid 绝对不可能重复 。
+
+
+聚合函数
+count : 统计有效数据的数量  
+sum  ：求和      --  只能用在 数字列上 。
+avg  ：求平均值  --  只能用在 数字列上 。
+max  ：求最大值
+min  ：求最小值 
+
+group by 分组 ，当出现了group by的时候，select 显示的列，要么是group by分组列，要么是聚合函数列。
+
+在oracle 中  where后面不能跟聚合函数  。。
+
+
+--decode() 相当于  if  else 
+
+
+
+
+创建视图的语法
+create or replace view 视图名
+as
+select 语句  ;
+
+
+decode函数的三种用法 
+1.分组统计 
+2.用来动态排序 
+3.用来行转列 。、
+
+
+select * from e for update ; 
+
+--1
+create table temp_e
+as 
+select distinct * from e order by eno ; 
+
+select * from temp_e ; 
+
+--2.删除原表中的数据
+
+delete from e ; 
+commit ; 
+
+--
+--快速删除  表里面的数据  并且不能回滚 。
+truncate table e ; 
+
+select * from e ; 
+
+
+--3.将临时表的数据 插入到  原表中  
+insert into e select * from temp_e ; 
+
+--4.删除临时表 
+drop table temp_e ; 
+
+
+select rowid , e.* from e; 
+
+--删除重复的数据 。
+
+--1.首先按照重复的列来进行分组 。  分组使用 group by 关键字
+
+
+select eno from e group by eno ;
+
+--在上面的结果集中是 不重复的，不再上面的结果集中 是重复的。
+delete from e where rowid not in 
+( select min(rowid) from e group by eno ) ;
+
+--统计每个组的人数   只显示部门人数多于 1人的部门 。
+
+select deptno ,count(*) from emp having  count(*)>1 group by deptno ; 
+
+
+select sysdate from dual; 
+select user from dual; 
+
+select decode(1+1,3,'ok3',2,'0k2','error') from dual; 
+
+--
+select * from t1 ; 
+--operation  普通员工   vp：高级员工   CEO：总经理
+
+--分组统计每个岗位下的人数 
+select job ,count(*) from t1 group by job ;
+
+--分别统计比普通员工数  和 比普通员工职位要高的员工数
+
+--比VP 职位高的人 。
+
+
+select decode(job,'OPERATION','oper','vp_ceo') , count(*) from t1 
+
+group by decode(job,'OPERATION','oper','vp_ceo') ; 
+
+
+
+select decode(job,'OPERATION','oper','vp_ceo') , t1.* from t1 
+
+
+--排序    销售部 拍 第一位   开发部拍第二   业务排第三  其他的不管 
+select dept.*,decode(d_name,'销售部',1,'开发部',2,'业务部',3,4) from dept order by 
+decode(d_name,'销售部',1,'开发部',2,'业务部',3,4) asc ; 
+
+--
+select * from sales ;
+
+--做业务分析，分析一下，那个季度的生意最好。
+
+create or replace view v_sales  
+as 
+
+select s_years ,
+max(decode(s_months ,'1季度',s_money)) as 一季度 ,
+max(decode(s_months ,'2季度',s_money)) as 二季度,
+max(decode(s_months ,'3季度',s_money)) as 三季度,
+max(decode(s_months ,'4季度',s_money)) as 四季度
+ from sales group by s_years ; 
+
+select * from v_sales; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

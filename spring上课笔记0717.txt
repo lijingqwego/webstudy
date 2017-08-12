@@ -1,0 +1,205 @@
+spring整合mybatis
+
+1.新建mybatis的SqlMapConfig.xml配置文件，和 spring的配置文件applicationContext.xml配置文件
+2.导入db.properties 和 log4j.properties 属性文件 。
+
+3.配置applicationContext.xml  导入头文件。
+使用注解
+<context-annotation-config>
+</
+
+--扫描包
+<context:component-scan  base-package="">
+
+
+加载数据库连接池
+<context:property-palceholder  location="db.properties">
+
+加载数据源
+BasicDataSource
+
+创建SqlSessionFactory
+
+<bean id="sqlSessionFactory" class="SqlSessionFactoryBean">
+
+加载主程序配置文件
+	configLocation =   value="classpath:SqlMapConfig.xml" 
+引入数据源
+dataSource = ""  ref="dataSource"   ;
+
+
+加载子程序配置  使用MapperScannerConfigurer
+设置 
+<property  name="basepackage"  vlaue="包名.类名" >
+如果需要加载多个包，需要指定
+
+
+spring IOC   AOP 
+IOC： Inversion of Control  控制翻转 。
+1.对象是我们用户自己创建，哪里使用我们就在哪里创建对象。
+2.现在对象已经不由我们来创建了，在服务器启动的时候，读取xml配置文件，实例化一批对象，放入到容器中，如果需要使用，直接从容器中来获取 。
+
+DI ：依赖注入 
+
+
+1.如果要用spring的，首先需要导包 。
+2.拷贝文件的头 。xml文件的头部 。
+xml文件的头部信息，规定了xml文件中能写那些标签 
+
+3.写bean 
+
+autowire=byType ： 服务器启动的时候，读取配置文件的内容，判断是否有UserDAO类型的对象，如果有，自动填充到set方法中去
+
+autowire="byName" ：服务器启动的时候，读取配置文件的内容，
+判断是否有名称 = 属性值的对象 。如果有直接注入，如果没有，就不注入
+
+
+singleton ：单例 ，
+prototype
+
+taglib prefix=“c” uri=“”
+c:if 
+
+
+servlet ：
+web.xml 配置
+
+通过注解的方式来实现配置 。
+
+@AutoWried ：自动装配，默认是按照byType来实现的
+如果需要按照名称来装配，需要借助   
+最好也写在set方法上面。
+@Qualifier("uao")
+
+
+@Resource ：首先按照byName   其次ByType  ，写在set方法上面
+
+都是在注入的时候使用的，
+
+
+@Component 组件的意思 。
+
+首先需要写在类上面的。 将这个类实例化创建这个类的对象 
+相当于你在配置文件中 写 
+<bean id =""  class="" />
+
+id有一个默认的，类名首字母小写。  UserService userService
+
+还需要在beans.xml配置文件中指定 扫描哪些包下面的注解 
+
+
+1.模拟spring  非常熟练
+2.用xml文件来配置 spring  ，这个也要非常熟练
+3.用注解的方式来配置spring ，这个也要非常熟练。
+开启注解
+<context:annotation-config></context:annotation-config>
+
+扫描包
+ <context:component-scan base-package="cn.com.demo"></context:component-scan>
+
+
+@Autowrird
+@Qualifier
+@Resource
+@Component  ： 可以放在service层，也可以放在dao层  
+@Service    ： 放在service层 
+@Controller ： 放在控制层 
+
+
+在注入的时候，set方法来进行注入 
+
+构造方法注入 
+
+
+在spring中，如果要使用注解，需要手动的设置一下，开启注解。
+
+<context:annotation-config></context:annotation-config>
+
+
+mybatis - spring    首先需要导包
+
+1.需要主配置文件SqlMapConfig.xml 
+配置数据库连接池，引入db.properties 属性文件 。
+
+配置被名  typeAliase 标签 
+
+加载子配置文件，使用mappers 标签 。
+
+2.spring 就是用来装载的容器 ，在服务器启动的时候，将所有的bean都实例化，放到容器中，如果spring + mybatis 整合起来，mybatis里面 连接池，加载子程序配置文件都需要放在spring来管理
+
+spring 也需要配置文件 
+
+
+3.拷贝 db.properties log4j.properties 属性文件 
+
+
+4.配置spring的注解
+
+<!-- 开启注解 -->
+	<context:annotation-config></context:annotation-config>
+	
+	<!-- 
+		扫描包下面的所有注解，在服务器启动的时候加载这个包下面的所有注解，找到对应的注解之后，实例化这个类放到容器中去 
+	 -->
+	<context:component-scan base-package="cn.com.demo"></context:component-scan>
+	
+5. 引入db.properties 属性文件。使用context:properties-placeholder location="db.proerties" 
+
+6.加载数据库连接池，借助工具类 BasicDataSource
+<bean id ="dataSource" class="BasicDataSource">
+	<property name="driverClassName" value="" />
+	<property name="url" />
+	<property name="username" />
+	<property name="pwd" />
+	<property name="maxActive" />
+	<property name="maxIdle" />
+</bean>
+
+7.实例化SqlSessionFactory 借助 SqlSessionFactoryBean 类
+	加载子程序配置文件 
+	设置 configLocaiton 
+	加载数据源   dataSource
+
+8.加载子配置文件 ，MapperScannerConfigurer 
+配置  扫描包的位置
+设置   basePackage
+
+还要设置 
+       SqlSessionFactoryBeanName
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+

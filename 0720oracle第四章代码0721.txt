@@ -1,0 +1,118 @@
+参数名  数据类型
+v_num   number(5,2)
+
+cursor mycur(v_num number(5,2))
+is 
+select 语句 ; 
+
+在声明参数游标的时候，括号里面的参数不能
+有括号，类型不能带长度 。
+
+
+
+1.PLSQL块 。
+2.数据类型 
+pls_integer 
+binary_integer 
+作业：查询pls_integer 和 binary_integer 的区别
+
+%type   ：可以某个表的某个列的数据类型 。
+%rowtype：可以是某个表一行的数据类型 。
+
+record ：记录类型 。如果使用记录类型，首先需要声明
+记录类型，
+type  记录名称  is  record 
+(
+	列名   数据类型 [default 默认值] ，
+	列名   数据类型 [default 默认值] ，
+	列名   数据类型 [default 默认值] 
+) ;
+
+声明一个记录类型的变量
+	变量名   记录类型名称 ; 
+
+什么情况下会使用记录类型 ？
+当查询多个表的情况最好使用记录类型 .
+
+
+流程控制语句
+
+if  条件  then
+	执行语句 ； 
+elsif 
+	执行语句 ； 
+
+else 
+	执行语句 ；  
+end if ; 
+
+循环控制   4 种  
+
+loop   exit  end loop ; 
+
+loop   exit when   end loop ; 
+
+while 条件 
+loop
+end loop ;
+
+for 循环变量  in  循环起始值 
+loop
+ 
+end loop ; 
+
+
+游标：cursor ，保存的是结果集，它提供了对结果集中每一行中的数据单独处理的办法。
+
+隐式游标：当执行dml操作的时候，会自动声明 ，打开 和 关闭 名称为 sql 的游标 。
+
+
+显示游标：需要手动的声明，打开和关闭游标 
+
+使用显示游标的步骤
+1.声明游标
+	cursor mycur is select 语句 ； 
+2.打开游标
+	open mycur ; 
+3.提取数据
+	fetch 游标名 into 变量名 ; 
+4.关闭游标
+	close mycur ; 
+
+
+使用fetch 每次只能提取一条数据 。如果需要提取多条数据，需要使用循环提取 。
+
+若需要循环提取游标数据，使用for in方式最简便，因为会默认的打开和关闭游标 。
+
+for 循环变量  in  游标名  
+loop 
+	循环变量就是游标中的每一行数据 ; 
+end loop ; 
+
+游标属性
+%found   发现了数据
+%notfound  没有数据
+%isopen  是否打开
+%rowcount  行号
+
+带参数的游标 ，其实就是在游标名后面加上括号，括号里面加上参数
+
+参数格式  ：   参数名   数据类型，数据类型有要求，不能有括号，不带长度 。
+
+在打开游标的时候，传递游标需要的参数。
+
+
+异常
+1.预定义异常
+
+cursor_already_open  游标已经打开
+no_data_found 没有查询到数据
+too_many_rows 查询到多行数据
+others 类似于java 中的exception ,可以捕获到所有异常 
+
+2.自定义异常
+a.首先声明异常类型(exception)的变量 。
+b.在需要触发异常的地方，显示的使用raise 异常名称  ; 用来触发异常 。
+c.在exception异常处理部门，使用 when 异常名称  then 
+执行代码 。
+

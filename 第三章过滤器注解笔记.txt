@@ -1,0 +1,171 @@
+servlet 特殊的java类 
+可以部署在servlet容器中，通过浏览器来进行访问。
+
+通过new  - servlet 
+
+servlet  extends  HttpServlet 
+
+可以直接写处理请求的代码 
+
+在doGet  或者 doPost方法里面写处理请求的代码 
+
+servlet配置 
+<servlet>
+	<servlet-name>
+	<servlet-class> 包名.类名 
+
+<servlet-mapping>
+	<servlet-name>
+	<url-pattern>
+
+
+servlet的生命周期 
+
+客户端发送请求  给   web 服务器(Servlet容器，web容器)   web容器接受到这个请求之后，根据请求的内容找到对应的servlet ，加载servlet ，初始化servlet(调用init方法)  ，处理用户的请求(在service方法中处理请求)  在service 中根据用户请求方式的不同，调用底层的doPost  或者  doGet方法 。
+在do** 方法中，写处理请求的代码 。
+处理完请求之后，将相应结果发送给客户端，客户端接受到响应之后，表示此次请求已经结束了，需要销毁servlet  调用destory方法 。
+
+
+Servlet接口，所有的servlet都要直接或者间接的实现servlet接口  
+
+getServletConfig()  ServletConfig 类型 相当于 config 
+
+可以用来获取servlet的初始化配置信息
+
+getServletContext() 相当于 application 
+getInitParameter() ;  获取全局的初始化参数 
+
+
+
+
+分派请求 
+RequestDispatcher 
+forward() :请求转发，跳转 ，forward后面的代码不会执行 
+
+include() ：包含 include后面的代码会执行 。
+
+rq.forward() ;
+System.out.println("3333333") ;  
+------------------
+分两个servlet 
+
+rq.include() ;
+System.out.println("3333333") ;  
+
+
+
+上传文件 。借助工具类 。
+
+
+
+<context-param>
+	<param-name>contextConfigLocation
+	<param-value> 加载配置文件 
+
+过滤器 。
+
+
+
+
+百度一下
+
+2.post请求处理乱码的过滤器
+
+过滤器  Filter  接口 
+
+servlet需要在web.xml文件配置一下 
+
+1.声明 
+servlet
+servlet-name
+servlet-class
+2.映射
+servlet-mapping
+servlet-name
+url-pattern
+
+filter 也需要配置 
+1.声明
+filter
+filter-name
+filter-class
+
+2.映射
+filter-mapping
+filter-name
+url-pattern 
+
+/*  所有的请求都需要经过过滤器 。
+
+*.jsp  :所有的jsp才需要经过过滤 
+/dept/*.jsp   dept目录下的所有jsp文件才会经过过滤器
+
+
+
+
+
+springmvc
+  
+DispatcherServlet
+<init-param>
+	<param-name>contextConfigLocation
+	<param-value> 加载spring的配置文件 。
+
+
+
+API:  
+
+
+JDBC  java连接数据库 
+
+1.Class.forName  加载驱动
+2.DriverManager.getConnection() 获取数据库连接
+3.String sql 
+4.创建预编译的PreparedStatement 对象 
+5.传参数 
+6.执行    select   返回ResultSet  
+
+while(rs.next()){
+	Student stu = new Student () ;
+		rs.getInt() ;
+		rs.getString() ;
+	list.add() ;
+}
+
+
+spring mvc 
+
+<form>
+
+<input name ="id" >
+
+name = "name"
+request.getParameter();
+
+注解：  注入  解释说明   web服务器看
+@WebServlet("/LoginServlet")
+
+方法的重写：在具有继承关系的类中，方法名相同，参数列表相同，返回类型相同。  可以 @Override 来标识 
+
+
+@WebServlet
+@WebFilter
+
+urlPatterns = "地址"
+initPara =  @WebInitParamter(name="",value="")
+
+@WebInitParameter
+
+
+
+
+作业
+1.get请求处理乱码的过滤器 
+
+2.重新写一次 增 ，删 ，改 查  登录 ，用户注解来实现 
+
+3.加上一个处理乱码的过滤器 。get 和 post
+
+4.思考，如何防止用户没有登录却访问页面
+
+

@@ -1,0 +1,92 @@
+<%include file = "" % >
+include指令标签 ，静态包含 ，将包含的多个文件最终生成一个java文件。
+
+
+
+
+<jsp:include page=""  />
+动作标签：将包含的多个文件最终生成多个java文件 。
+
+*.java  就是 servlet 本质上就是java类 。
+
+接口
+implements 实现接口的关键字 
+
+interface 
+
+接口里面的方法都是抽象方法 。
+接口里面的变量都是常量 。
+
+常量命名规则 ：  所有字母都要大写，如果有多个单词组成，中间需要用 _  隔开 。
+
+
+
+static 修饰的变量 ，称之为 静态变量 ，类变量 
+static修饰的变量有什么特点 ？
+
+被所有对象所共享 。
+
+
+class Test{
+	static int num = 100 ;
+	public static void main(){
+		Test t1 = new Test() ;
+		t1.num = 200 ;
+
+		Test t2 = new Test();
+		System.out.println(t2.num) ;
+	}
+}
+
+用application.getInitParameter("encoding") ;
+
+配置servlet的目的，就是为了让不同的请求找到不同的serlvet
+
+1.声明Servlet对象 
+servlet标签
+2.映射servlet对象 
+servlet-mapping 标签
+
+url-pattern 这里 需要注意
+
+一定要以  / 
+ 
+
+404 : 找不到页面 ，
+500 ：服务器端代码异常 ，
+400  
+
+http://localhost:8080/0624/servlet/showServlet
+http://localhost:8080/0624/vali.jsp
+
+使用get方式提交数据，会将用户名和密码明文显示在url后面 ，
+
+使用method = post 提交表单，表单里面的内容不会显示在url中 ，
+
+
+如果提交方式是post方式，才能使用下面的处理乱码的方式
+
+超链接是以get方式来提交 
+
+只有在提交表单的时候，明确的指定method = post 那么此时才是post方式提交 ，否则其他所有方式都是get方式 
+
+jsp页面只用来做展示 
+
+具体的业务逻辑代码，java代码来处理 
+
+mvc：设计模式
+
+model ：模型层   javabean来充当 ，java类
+
+如何把jsp中代码转移到java文件中 。
+
+可以把直接移植过 。
+
+
+view ： 视图层   只做展示作用  
+controller  ：控制器  servlet 来充当
+接受用户输入的值，和请求转发 。
+
+
+
+

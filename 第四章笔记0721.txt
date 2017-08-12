@@ -1,0 +1,195 @@
+函数 ，存储过程，触发
+
+PLSQL：声明  异常   主程序代码 
+
+变量语法 ：变量名  数据类型 。
+常量语法 ：常量名  constant 数据类型 := 100 ;
+
+数据类型 
+1.pls_integer binary_integer 区别。
+
+
+%type ：变量可以声明为某个表的某一列的数据类型 。 
+%rowtype ：变量可以是某个表里面一行数据类型 。
+record ：记录类型 。
+
+声明 数据类型 。
+
+type 数据类型名  is  record
+(
+	列名  数据类型 ,
+	。。。。。
+) ;
+
+声明一个记录类型的变量 。
+
+
+if 条件  then  
+
+elsif 条件  then
+
+else
+
+end if;
+
+
+
+游标 ：能够将多行结果集中的每一行数据单独拿出来进行处理。
+
+
+隐式游标:在执行dml的时候，会自动声明，打开和关闭 名称为sql的游标。
+
+
+显示游标
+
+1.声明
+
+2.打开
+
+3.提取数据
+
+4.关闭游标
+
+for 循环变量 in (select )
+
+
+
+异常 
+
+自定义异常
+1.声明异常类型
+的变量
+
+exc exception ; 
+
+2.在需要触发异常的地方，显示的使用raise  异常名 ；
+
+3.在exception  when  异常名称  then 
+	
+
+
+
+
+function 函数名(){
+	
+}
+
+function 函数名(){
+	return 值 ; 
+}
+
+function 函数名(参数名){
+	return 值 ; 
+}
+
+
+function 函数 。
+
+函数是可以存储在数据库中代码块 ，
+作用：用来返回特定的数据 。
+
+语法
+create or replace function 函数名
+(
+	参数名  参数类型  数据类型  ，
+	参数名  参数类型  数据类型  
+)
+return 数据类型 
+as
+begin 
+
+	return 返回值 ;
+end ; 
+
+参数类型
+1. in 参数 ：输入参数，只能传值给他
+2. out 参数: 输出参数，只能赋值给他
+3. in out 参数 :输入输出参数 ，既能传值又能赋值。
+
+
+1.创建函数function时候，return 返回类型，不能带长度。
+
+dual：
+
+2.如果调用带有输出参数的函数，需要使用plsql块调用。
+3.PlSQL块中不能单独只写一个查询语句
+
+
+
+
+存储过程  porcedure  
+作用：用来执行特定的操作。
+
+语法
+create or replace procedure 存储过程名 
+(
+	参数名  参数类型  数据类型  
+)
+as
+	--声明变量 
+begin 
+	
+end ; 
+
+user tables 
+user_views 
+user_indexes ; 
+user_contraints ;
+user_functions ; 
+
+
+
+触发器 trigger 
+
+员工管理系统。
+员工会离职。离职的员工会从员工信息表中删除 。
+但是
+
+
+触发器语法
+
+
+
+create or replace  trigger  触发器名称
+触发时机  触发事件
+on 表名  
+for each row
+begin
+	触发器代码;  
+end ;
+
+
+
+触发时机：  before  |  after 
+触发事件：  insert  delete  update(甚至可以指定在更改某些列的时候触发)
+
+
+包package 
+
+包头：只做声明 。
+
+包体：写实现。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

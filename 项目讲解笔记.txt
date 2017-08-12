@@ -1,0 +1,117 @@
+spring-tiles框架，对页面进行切割
+头部，菜单，主题，底部 
+
+demo 
+
+1.spring-tiles  在ssm基础上进行的添加
+
+2.配置SSM框架 
+
+
+丢给你一个案例，demo
+
+写好的js  css  
+
+ssm 
+
+InternalResourceViewResolver 
+
+前缀和后缀  
+
+返回的是逻辑视图名 。
+
+spring-tiles框架之后，返回就是 tiles 配置文件里面配置的名称。
+
+
+select * from 表名 ; 
+
+
+查询的时候尽量的避免使用* 
+
+*  查询效率低 。
+如何实现关联角色的功能 ？
+
+1.两个表关联一起查询出来。
+
+
+可以通过关联表，查询出来用户表角色表之间的关系
+
+如果在页面上显示的话，可以在一张表上 加上一列
+
+------
+1.把所有的角色加载出来，前面加上复选框 checkbox 
+2.查询关联信息表，查询出来当前用户所具有的角色 
+用户和角色之间是 一对多的关系 。
+
+查询出来的角色id ，放在一个集合中来保管。
+
+把获取的信息，用户所具有的角色信息，封装在一个集合中
+for(集合.size){
+	mapper.insert(list.get(i))	
+}
+
+--不这样做 
+select r.* ,nvl((select roleid from p_um_user_role um
+where um.userid ='20170326000002'  and um.roleid = r.roleid
+),1) isrole from p_um_role r
+
+
+
+
+mybatis已经帮我们提供了好了循环插入的方法，你只需要在mapper集合中传入一个集合 。 LIst <PUmRole>
+
+
+insert into 表名 	
+	select 语句  from dual 
+	union all
+	select 语句  from dual 
+	union all
+	select 语句  from dual 
+
+ <insert id="addUserAndInfo" parameterType="pUmUserRole">
+  	insert into P_UM_USER_ROLE 
+  	<foreach collection="pUmUserRoleList" item="item" index="index" separator="union all">
+  		select 
+  			#{item.userid} userid ,
+  			#{item.roleid} roleid ,
+  			1
+  		from dual 
+  	</foreach>
+  </insert>
+
+
+集合从哪里来 ？ 
+Mapper 中定义的参数  集合 。
+
+1.可以在service层中进行构造这个集合 ，
+2.直接controller就把集合给构造好 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

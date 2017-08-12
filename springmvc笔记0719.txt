@@ -1,0 +1,144 @@
+spring mvc
+
+spring IOC:控制翻转
+
+
+DI：依赖注入
+
+spring + mybatis
+1.开启注解
+contex:annotation-config 
+
+2.扫描包
+context:component-scan basepackage=""
+
+3.引入属性文件
+context:proerties-placehodler location=""
+
+4.
+<bean id="dataSource" class="BasicDataSource">
+<property  driverClass
+		url
+		username
+		password
+
+5.创建SqlSessionFactory 借助 SqlSessionFactoryBean
+加载主配置文件 
+	configLocation   value=“classpath:”“”
+	dataSource  ref="dataSource"
+
+6.加载子配置文件 。借助  MapperScannerConfigurer
+	basePackage   value=""
+加载sqlSessionFactory
+	sqlSessionFactoryBeanName  
+	value = sqlSessionFactory 
+
+
+
+mvc： 一种设计模式 ，
+
+m：model 模型   javabean Java类
+
+v：view  jsp充当
+c：controller  servlet 
+
+
+
+spring mvc 
+
+可以不可以让cs系统，使用bs方式来进行访问 。
+
+借助第三方工具 citrix 
+
+
+前端控制器DispatcherServlet   servlet 
+
+web.xml文件中配置
+1.servlet 
+2.servlet-mapping
+
+运转流程。
+
+1.用户发送请求，给前端控制器(DispatcherServlet)
+2.前端控制器接受到用户请求之后，调用处理器映射器(HandlerMapping):将url和java之间形成一个映射关系
+3.处理器映射器（HandlerMapping）返回一个handler处理器（处理用户的请求）
+，由前端控制器来接收这个处理器。
+4.前端控制器将这个处理器handler 传给 处理器适配器，又处理器适配器来执行这个handler 。返回一个ModelAndView 给前端控制器
+
+5.前端控制器将ModelAndView传递给视图解析器(ViewResolver),视图解析器解析ModelAndView，返回一个View，给前端控制器。
+
+6.前端控制器拿到view之后，对这个view进行视图渲染，渲染过后响应给用户。用户接受响应。
+
+
+spring mvc 四大组件。
+
+1.前端控制器(dispatcherServlet)
+
+2.处理器映射器(HandlerMapping)  作用：将url和javabean之间做一个映射
+借助工具类 ：BeanNameUrlHandlerMapping  
+
+
+另外一个映射器 
+SimpleUrlHandlerMapping
+
+
+3.处理器适配器(HandlerAdapter):作用 执行handler 
+
+借助工具类 。
+SimpleControllerHandlerAdapter
+
+使用上面这个适配器，视图解析是没有作用的。
+
+
+
+另外一个适配器
+HttpRequestHandlerAdapter
+
+
+
+将注解的映射器  注解的适配器   启用的前提是需要启动注解，扫描包
+
+前端控制器  DispatcherServlet 
+
+处理器映射器
+1.BeanNameUrlHandlerMapping
+2.SimpleUrlHandlerMapping
+3.RequestMappingHandlerMapping :注解的方式
+
+处理器适配器
+1.SimpleControllerHandlerAdapter 
+要求： handler需要实现Controller 接口 。
+
+2.HttpRequestHandlerAdatper
+要求：handler需要实现HttpRequestHandler接口。
+注意：使用这种适配器，不支持视图解析器
+
+3.RequestMappingHandlerAdapter 
+要求：注解的映射器，注解的适配器需要同时使用。
+注意：使用主机额的映射器，适配器，需要开启注解，扫描包。
+
+
+
+如果要使用注解的映射器，注解的适配器，还有一种非常简单的方式。 巴巴爸爸                                                   
+加载注解驱动
+<mvc:annotation-driven></mvc:annotation-driven>
+
+
+4.视图解析器(ViewResolver)  ：解析ModelAndView 
+借助工具类
+InternalResourceViewResolver
+
+
+
+spring mvc  表现层的框架 。
+
+
+
+
+
+
+
+
+
+
+
