@@ -1,0 +1,96 @@
+SSM整合（）
+1.导入jar包
+2.数据库、日志属性文件(db.properties,log4.properties)
+3.搭建框架
+	com.huiji.po
+	com.huiji.mapper
+	com.huiji.service
+	com.huiji.controller
+4.配置文件config资源文件夹
+(1)mybatis
+在SqlMapConfig.xml文件中配置别名
+	<configuration>
+		<typeAliases>
+			<package name="com.huiji.po"/>
+		</typeAliases>
+	</configuration>
+(2)spring
+AppliactionContext-dao.xml
+<1>.加载属性文件
+	<context:property-placeholder location="classpath:db.properties"/>
+<2>.配置数据库源(借助类 BasicDataSource)
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>		
+		<property name="url" value="${jdbc.url}"></property>		
+		<property name="username" value="${jdbc.username}"></property>		
+		<property name="password" value="${jdbc.password}"></property>		
+		<property name="maxActive" value="10"></property>		
+		<property name="maxIdle" value="5"></property>		
+	</bean>
+<3>.配置会话工厂(借助SqlSessionFactoryBean类)
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 加载mybatis主程序的配置文件SqlMapConfig.xml -->
+		<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"></property>
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+<4>.扫描XXMapper.xml文件(借助类MapperScannerConfigurer类)
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描子配置文件 -->
+		<property name="basePackage" value="com.huiji.mapper"></property>
+		<!-- 引入SqlSessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+ApplicationContext-service.xml
+	<!-- 扫描包下面的注解 -->
+	<context:component-scan base-package="com.huiji.service"></context:component-scan>
+SpringMvc.xml
+	<!-- 开启注解 -->
+	<context:annotation-config></context:annotation-config>
+	<!-- 扫描包下面的注解 -->
+	<context:component-scan base-package="com.huiji.controller"></context:component-scan>
+	<!-- 加载注解驱动 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<!-- 配置视图解析器 借助类 InternalResourceViewResolver -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+5.配置web.xml
+	<!-- 添加监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 加载配置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/application-*.xml,classpath:web/application-*.xml</param-value>
+	</context-param>
+	<!-- 配置前端控制器，前端控制器中需要加载spring mvc 的配置信息 -->
+	<servlet>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/SpringMvc.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 配置过滤器 -->
+	<filter>
+		<filter-name>characterencoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterencoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
