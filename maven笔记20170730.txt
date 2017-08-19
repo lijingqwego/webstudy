@@ -46,7 +46,7 @@ mvn archetype:generate
 mvn archetype:generate -DgroupId=com.imooc.maven04 -DartifactId=maven04-demo -Dversion=1.0.0SNAPSHOT -Dpackage=com.imooc.maven04.demo
 
 groupId组织名，公司网站的反写+项目名
-artifactId项目名-模块名
+artifactId（模块名）项目名-模块名
 version版本号
 package代码所存在的包名
 
